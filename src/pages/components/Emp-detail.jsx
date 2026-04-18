@@ -1,105 +1,139 @@
+import { useMemo } from "react";
+import { useToast } from "../../toast/useToast";
 
 
-export default function Empdetail({ go }){
-    return (
-        <>
-        <div className="stat-grid">
-          <div className="stat-card pos">
-            <div className="sl">Paid this month</div>
-            <div className="sv">₦12.4M</div>
-            <div className="ss">63 employees</div>
+export default function Empdetail({ selectedEmployeeId, employees, setEmployees }) {
+
+
+
+  const { addToast } = useToast()
+  
+    function formatNaira(value) {
+      const n = Number(value) || 0;
+      return `₦${n.toLocaleString("en-NG")}`;
+    }
+
+  const selectedEmployee = useMemo(() => {
+    return employees.find((e) => e.id === selectedEmployeeId) || employees[0];
+  }, [employees, selectedEmployeeId]);
+
+  return (
+    <>
+      <div className='emp-header'>
+        <div className='avatar'>
+          {selectedEmployee.name
+            .split(/\s+/)
+            .map((w) => w[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase()}
+        </div>
+        <div>
+          <div style={{ fontSize: 15, fontWeight: 600 }}>
+            {selectedEmployee.name}
           </div>
-          <div className="stat-card warn">
-            <div className="sl">Pending approval</div>
-            <div className="sv">1 run</div>
-            <div className="ss">Waiting on Finance</div>
-          </div>
-          <div className="stat-card err">
-            <div className="sl">Failed payments</div>
-            <div className="sv">0</div>
-            <div className="ss">All clear</div>
-          </div>
-          <div className="stat-card">
-            <div className="sl">Wallet balance</div>
-            <div className="sv">₦4.2M</div>
-            <div className="ss">Updated now</div>
+          <div className='emp-meta'>
+            {selectedEmployee.code} · {selectedEmployee.rank} ·{" "}
+            {selectedEmployee.department}
           </div>
         </div>
-
-        <div className="sec-title">Getting started</div>
-        <div className="checklist">
-          <div className="cl-head">
-            <span className="cl-title">Setup checklist</span>
-            <span className="cl-prog">3 of 5 done</span>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 7 }}>
+          <button type='button' className='tb-btn'>
+            Edit
+          </button>
+          <button
+            type='button'
+            className='tb-btn'
+            style={{
+              color: selectedEmployee.active
+                ? "var(--danger)"
+                : "var(--positive)",
+              borderColor: "var(--border)",
+            }}
+            onClick={() => {
+              const nextActive = !selectedEmployee.active;
+              setEmployees((prev) =>
+                prev.map((e) =>
+                  e.id === selectedEmployee.id
+                    ? { ...e, active: !e.active }
+                    : e,
+                ),
+              );
+              addToast(
+                nextActive ? "Employee activated" : "Employee deactivated",
+                nextActive ? "success" : "error",
+              );
+            }}>
+            {selectedEmployee.active ? "Deactivate" : "Activate"}
+          </button>
+        </div>
+      </div>
+      <div className='ed-grid'>
+        <div className='ed-card'>
+          <div className='ed-title'>Personal</div>
+          <div className='ed-row'>
+            <span style={{ color: "var(--text-secondary)" }}>Email</span>
+            <span>
+              {selectedEmployee.name.replace(/\s+/g, ".").toLowerCase()}
+              @school.edu.ng
+            </span>
           </div>
-          <div className="cl-row">
-            <div className="cl-check done">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden>
-                <path d="M1 4l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <span className="cl-label done">Company account created</span>
-          </div>
-          <div className="cl-row">
-            <div className="cl-check done">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden>
-                <path d="M1 4l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <span className="cl-label done">Employee ranks set up</span>
-          </div>
-          <div className="cl-row">
-            <div className="cl-check done">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden>
-                <path d="M1 4l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <span className="cl-label done">Employees added (63)</span>
-          </div>
-          <div className="cl-row">
-            <div className="cl-check" />
-            <span className="cl-label">Fund your wallet</span>
-            <button type="button" className="cl-action" onClick={() => go('wallet')}>
-              Fund now →
-            </button>
-          </div>
-          <div className="cl-row">
-            <div className="cl-check" />
-            <span className="cl-label">Invite your team members</span>
-            <button type="button" className="cl-action" onClick={() => go('team')}>
-              Invite →
-            </button>
+          <div className='ed-row'>
+            <span style={{ color: "var(--text-secondary)" }}>Status</span>
+            <span
+              style={{
+                color: selectedEmployee.active
+                  ? "var(--positive)"
+                  : "var(--danger)",
+                fontWeight: 600,
+              }}>
+              {selectedEmployee.active ? "Active" : "Inactive"}
+            </span>
           </div>
         </div>
-
-        <div className="sec-title">Recent activity</div>
-        <div className="act-list">
-          <div className="act-row">
-            <div className="dot p" />
-            <div className="act-txt">March salary run completed — 63 payments sent</div>
-            <div className="act-t">Today 11:32am</div>
+        <div className='ed-card'>
+          <div className='ed-title'>Compensation</div>
+          <div className='ed-row'>
+            <span style={{ color: "var(--text-secondary)" }}>Gross</span>
+            <span>{formatNaira(selectedEmployee.netSalary)}</span>
           </div>
-          <div className="act-row">
-            <div className="dot w" />
-            <div className="act-txt">Bonus run #012 submitted — waiting for Chidi</div>
-            <div className="act-t">Today 9:15am</div>
-          </div>
-          <div className="act-row">
-            <div className="dot n" />
-            <div className="act-txt">Chidi Obi accepted his team invite</div>
-            <div className="act-t">Yesterday</div>
-          </div>
-          <div className="act-row">
-            <div className="dot p" />
-            <div className="act-txt">4 new teachers added via bulk import</div>
-            <div className="act-t">Mar 24</div>
-          </div>
-          <div className="act-row">
-            <div className="dot e" />
-            <div className="act-txt">Wallet balance low — topped up ₦5,000,000</div>
-            <div className="act-t">Mar 20</div>
+          <div className='ed-row'>
+            <span style={{ color: "var(--text-secondary)" }}>Net pay</span>
+            <span style={{ color: "var(--positive)", fontWeight: 600 }}>
+              {formatNaira(selectedEmployee.netSalary)}
+            </span>
           </div>
         </div>
-      </>
-    )
+      </div>
+      <div className='sec-title' style={{ marginTop: 14 }}>
+        Payment history
+      </div>
+      <div className='tbl'>
+        <div
+          className='ph-row'
+          style={{
+            fontWeight: 600,
+            color: "var(--text-secondary)",
+            fontSize: 11,
+          }}>
+          <span>Period</span>
+          <span>Gross</span>
+          <span>Net paid</span>
+          <span>Status</span>
+        </div>
+        <div className='ph-row'>
+          <span>March 2025</span>
+          <span>₦300,000</span>
+          <span>₦253,500</span>
+          <span className='sb sb-ok'>Sent</span>
+        </div>
+        <div className='ph-row'>
+          <span>February 2025</span>
+          <span>₦300,000</span>
+          <span>₦253,500</span>
+          <span className='sb sb-ok'>Sent</span>
+        </div>
+      </div>
+    </>
+  );
 }
