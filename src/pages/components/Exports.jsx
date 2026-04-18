@@ -8,18 +8,20 @@ import Reports from "./Reports"
 import Settings from "./Settings"
 import Team from "./Team"
 import Wallet from "./Wallet"
+import RecentActivities from "./Recent-Activities"
 
 
 export {
-    Overview,
-    AddEmp,
-    Employees, 
-    Empdetail,
-    Approvals,
-    PaymentHistory,
-    NewPaymentRun,
-    Reports,
-    Settings,
-    Team,
-    Wallet,
- }
+  Overview,
+  AddEmp,
+  Employees,
+  Empdetail,
+  Approvals,
+  PaymentHistory,
+  NewPaymentRun,
+  Reports,
+  Settings,
+  Team,
+  Wallet,
+  RecentActivities
+};
