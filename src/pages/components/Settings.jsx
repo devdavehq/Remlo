@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useToast } from "../../toast/useToast";
 
 export default function Settings({
@@ -21,40 +21,40 @@ export default function Settings({
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const DEFAULT_RANKS = [
-    "Junior Teacher",
-    "Senior Teacher",
-    "Head of Department",
-    "Vice Principal",
-    "Principal",
-  ];
-  const [ranks, setRanks] = useState(DEFAULT_RANKS);
-  const [newRank, setNewRank] = useState("");
+  // const DEFAULT_RANKS = [
+  //   "Junior Teacher",
+  //   "Senior Teacher",
+  //   "Head of Department",
+  //   "Vice Principal",
+  //   "Principal",
+  // ];
+  // const [ranks, setRanks] = useState(DEFAULT_RANKS);
+  // const [newRank, setNewRank] = useState("");
 
-  const rankRows = useMemo(
-    () =>
-      ranks.map((name, i) => (
-        <div key={name + i} className='rank-row'>
-          <span className='drag'>⠿</span>
-          <span>{name}</span>
-          <span className='lv'>Level {i + 1}</span>
-          <span
-            className='del'
-            onClick={() => setRanks((r) => r.filter((_, j) => j !== i))}>
-            ×
-          </span>
-        </div>
-      )),
-    [ranks],
-  );
+  // const rankRows = useMemo(
+  //   () =>
+  //     ranks.map((name, i) => (
+  //       <div key={name + i} className='rank-row'>
+  //         <span className='drag'>⠿</span>
+  //         <span>{name}</span>
+  //         <span className='lv'>Level {i + 1}</span>
+  //         <span
+  //           className='del'
+  //           onClick={() => setRanks((r) => r.filter((_, j) => j !== i))}>
+  //           ×
+  //         </span>
+  //       </div>
+  //     )),
+  //   [ranks],
+  // );
 
-  function addRank() {
-    const v = newRank.trim();
-    if (!v) return;
-    setRanks((r) => [...r, v]);
-    setNewRank("");
-    addToast("Rank added", "success");
-  }
+  // function addRank() {
+  //   const v = newRank.trim();
+  //   if (!v) return;
+  //   setRanks((r) => [...r, v]);
+  //   setNewRank("");
+  //   addToast("Rank added", "success");
+  // }
 
   function handleSavePaystack() {
     addToast(
@@ -135,51 +135,6 @@ export default function Settings({
         </div>
       )}
 
-      {/* Account Settings */}
-      <div className='set-card'>
-        <div className='set-title'>Account Settings</div>
-        <form onSubmit={handleUpdateAccount}>
-          <div className='field'>
-            <label>Username / Email</label>
-            <input
-              type='email'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className='field'>
-            <label>Current Password</label>
-            <input
-              type='password'
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder='Enter current password'
-            />
-          </div>
-          <div className='field'>
-            <label>New Password</label>
-            <input
-              type='password'
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder='Leave empty to keep current'
-            />
-          </div>
-          <div className='field'>
-            <label>Confirm New Password</label>
-            <input
-              type='password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder='Confirm new password'
-            />
-          </div>
-          <button type='submit' className='tb-btn primary'>
-            Update Account
-          </button>
-        </form>
-      </div>
-
       {/* Approval workflow - Only for admin */}
       {isAdmin && (
         <div className='set-card'>
@@ -250,7 +205,7 @@ export default function Settings({
       </div>
 
       {/* Rank management - Only for admin */}
-      {isAdmin && (
+      {/* {isAdmin && (
         <div className='set-card'>
           <div className='set-title'>Rank management</div>
           <p
@@ -273,7 +228,52 @@ export default function Settings({
             </button>
           </div>
         </div>
-      )}
+      )} */}
+
+      {/* Account Settings */}
+      <div className='set-card'>
+        <div className='set-title'>Account Settings</div>
+        <form onSubmit={handleUpdateAccount}>
+          <div className='field'>
+            <label>Username / Email</label>
+            <input
+              type='email'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className='field'>
+            <label>Current Password</label>
+            <input
+              type='password'
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder='Enter current password'
+            />
+          </div>
+          <div className='field'>
+            <label>New Password</label>
+            <input
+              type='password'
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder='Leave empty to keep current'
+            />
+          </div>
+          <div className='field'>
+            <label>Confirm New Password</label>
+            <input
+              type='password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder='Confirm new password'
+            />
+          </div>
+          <button type='submit' className='tb-btn primary'>
+            Update Account
+          </button>
+        </form>
+      </div>
 
       {/* Notifications */}
       <div className='set-card'>
